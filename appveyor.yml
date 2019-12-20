@@ -6,3 +6,6 @@ image:
 configuration:
 - Debug
 - Release
+
+build:
+  project: $(project_name)
