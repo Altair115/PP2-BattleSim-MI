@@ -8,4 +8,4 @@ configuration:
 - Release
 
 build:
-  project: $(project_name)
+  project: P2BattleSimulator.sln
