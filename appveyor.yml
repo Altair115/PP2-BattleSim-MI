@@ -1,0 +1,24 @@
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2019
+install:
+- cmd: >-
+    choco install ninja -y
+
+    choco source add -n=AFG -s="https://api.bintray.com/nuget/anotherfoxguy/choco-pkg"
+
+    choco install conan -y
+
+    refreshenv
+
+cache: C:/Users/appveyor/.conan/
+build_script:
+- cmd: >-
+    call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+
+    cmake -GNinja -DCMAKE_BUILD_TYPE=Release .
+
+    ninja
+
+    pmm-cli.bat /Conan /Clean
