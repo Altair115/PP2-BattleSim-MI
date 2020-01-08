@@ -1,0 +1,12 @@
+[generators]
+visual_studio
+
+[requires]
+tbb/2020.0
+
+[options]
+tbb:shared=True
+
+[imports]
+bin, *.dll -> ./source @ keep_path=False
+lib, *.so* -> ./source @ keep_path=False

@@ -29,6 +29,12 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="x64\.conan\conanbuildinfo.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="x64\.conan\conanbuildinfo.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <!-- Custom section, because microsoft can't keep this organised -->
   <PropertyGroup>
@@ -47,14 +53,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>lib\glew-2.1.0\include;lib\SDL2-2.0.10\include;lib\FreeImage\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(USERPROFILE)\.conan\data\tbb\2020.0\_\_\package\127af201a4cdf8111e2e08540525c245c9b3b99e\include;lib\glew-2.1.0\include;lib\SDL2-2.0.10\include;lib\FreeImage\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;advapi32.lib;user32.lib;sdl2.lib;sdl2main.lib;glew32.lib;FreeImage.lib</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;advapi32.lib;user32.lib;sdl2.lib;sdl2main.lib;glew32.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <OutputFile>$(TargetPath)</OutputFile>
@@ -64,7 +70,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
     <Link>
-      <AdditionalLibraryDirectories>lib\SDL2-2.0.10\lib\x64;lib\glew-2.1.0\lib\x64;lib\FreeImage\lib64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>lib\SDL2-2.0.10\lib\x64;lib\glew-2.1.0\lib\x64;$(USERPROFILE)\.conan\data\tbb\2020.0\_\_\package\4f1710918aa542fccb5a54d7bd712e4b0750b50d\lib;$(USERPROFILE)\.conan\data\tbb\2020.0\_\_\package\127af201a4cdf8111e2e08540525c245c9b3b99e\lib;lib\FreeImage\lib64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -143,6 +149,7 @@
     <ClInclude Include="ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="conanfile.txt" />
     <Text Include="_readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
