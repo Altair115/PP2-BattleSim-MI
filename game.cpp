@@ -200,10 +200,13 @@ void Game::Draw()
                       });
 
     //*Draw Particle_beam*
-    for (Particle_beam& particle_beam : particle_beams)
-    {
-        particle_beam.Draw(screen);
-    }
+    //for (Particle_beam& particle_beam : particle_beams)
+    tbb::parallel_for(tbb::blocked_range<int>(1, particle_beams.size()),
+                      [&](tbb::blocked_range<int> r) {
+                          for (int i = r.begin(); i < r.end(); ++i) {
+                              particle_beams[i].Draw(screen);
+                          }
+                      });
 
     //*Draw Explosion*
     for (Explosion& _explosion : explosions)
