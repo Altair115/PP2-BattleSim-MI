@@ -209,10 +209,14 @@ void Game::Draw()
                       });
 
     //*Draw Explosion*
-    for (Explosion& _explosion : explosions)
-    {
-        _explosion.Draw(screen);
-    }
+    //for (Explosion& _explosion : explosions)
+    tbb::parallel_for(tbb::blocked_range<int>(1, explosions.size()),
+                      [&](tbb::blocked_range<int> r) {
+                          for (int i = r.begin(); i < r.end(); ++i)
+                          {
+                              explosions[i].Draw(screen);
+                          }
+                      });
 
     //Draw sorted health bars
     for (int t = 0; t < 2; t++)
