@@ -162,6 +162,7 @@ void Game::Draw()
 
     //Draw sprites
 
+    //*Draw Tanks*
     //for (int i = 0; i < NUM_TANKS_BLUE + NUM_TANKS_RED; i++)
     tbb::parallel_for(tbb::blocked_range<int>(1, NUM_TANKS_BLUE + NUM_TANKS_RED),
                       [&](tbb::blocked_range<int> r) {
@@ -178,10 +179,15 @@ void Game::Draw()
                           }
                       });
 
-    for (Rocket& rocket : rockets)
-    {
-        rocket.Draw(screen);
-    }
+    //*Draw Rockets*
+    //for (Rocket& rocket : rockets)
+    tbb::parallel_for(tbb::blocked_range<int>(1, rockets.size()),
+                      [&](tbb::blocked_range<int> r) {
+                          for (int i = r.begin(); i < r.end(); ++i)
+                          {
+                              rockets[i].Draw(screen);
+                          }
+                      });
 
     for (Smoke& _smoke : smokes)
     {
