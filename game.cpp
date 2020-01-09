@@ -161,15 +161,22 @@ void Game::Draw()
     background.Draw(screen, 0, 0);
 
     //Draw sprites
-    for (int i = 0; i < NUM_TANKS_BLUE + NUM_TANKS_RED; i++)
-    {
-        tanks.at(i).Draw(screen);
 
-        vec2 tPos = tanks.at(i).Get_Position();
-        // tread marks
-        if ((tPos.x >= 0) && (tPos.x < SCRWIDTH) && (tPos.y >= 0) && (tPos.y < SCRHEIGHT))
-            background.GetBuffer()[(int)tPos.x + (int)tPos.y * SCRWIDTH] = SubBlend(background.GetBuffer()[(int)tPos.x + (int)tPos.y * SCRWIDTH], 0x808080);
-    }
+    //for (int i = 0; i < NUM_TANKS_BLUE + NUM_TANKS_RED; i++)
+    tbb::parallel_for(tbb::blocked_range<int>(1, NUM_TANKS_BLUE + NUM_TANKS_RED),
+                      [&](tbb::blocked_range<int> r) {
+
+                          for (int i = r.begin(); i < r.end(); ++i)
+                          {
+                              tanks.at(i).Draw(screen);
+
+                              vec2 tPos = tanks.at(i).Get_Position();
+                              // tread marks
+                              if ((tPos.x >= 0) && (tPos.x < SCRWIDTH) && (tPos.y >= 0) && (tPos.y < SCRHEIGHT))
+                                  background.GetBuffer()[(int)tPos.x + (int)tPos.y * SCRWIDTH] = SubBlend(
+                                      background.GetBuffer()[(int)tPos.x + (int)tPos.y * SCRWIDTH], 0x808080);
+                          }
+                      });
 
     for (Rocket& rocket : rockets)
     {
