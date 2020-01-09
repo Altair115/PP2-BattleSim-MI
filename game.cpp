@@ -189,16 +189,23 @@ void Game::Draw()
                           }
                       });
 
-    for (Smoke& _smoke : smokes)
-    {
-        _smoke.Draw(screen);
-    }
+    //*Draw Smoke*
+    //for (Smoke& _smoke : smokes)
+    tbb::parallel_for(tbb::blocked_range<int>(1, smokes.size()),
+                      [&](tbb::blocked_range<int> r) {
+                          for (int i = r.begin(); i < r.end(); ++i)
+                          {
+                              smokes[i].Draw(screen);
+                          }
+                      });
 
+    //*Draw Particle_beam*
     for (Particle_beam& particle_beam : particle_beams)
     {
         particle_beam.Draw(screen);
     }
 
+    //*Draw Explosion*
     for (Explosion& _explosion : explosions)
     {
         _explosion.Draw(screen);
