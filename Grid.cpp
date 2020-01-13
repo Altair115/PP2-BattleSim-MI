@@ -34,19 +34,14 @@ void BattleSim::Grid::addTank2Cell(Tank* tank)
 }
 
 void BattleSim::Grid::moveTank2NewCell(Tank* tank, vec2 oldposition)
-    {
-        
+    {  
     // See which cell it was in.
     int oldCellX = (int)((oldposition.x / Grid::sizeOfCell) + gridOffset);
     int oldCellY = (int)((oldposition.y / Grid::sizeOfCell) + gridOffset);
 
     int cellX = (int)((tank->position.x / Grid::sizeOfCell) + gridOffset);
     int cellY = (int)((tank->position.y / Grid::sizeOfCell) + gridOffset);
-    if (oldCellX != cellX) {
-        int x = 0;
-    }
-    tankcells[oldCellX][oldCellY];
-    // handelCell(cellX,cellY);
+    
     // If it didn't change cells, we're done.
     if (oldCellX == cellX && oldCellY == cellY) return;
     // Unlink it from the list of its old cell.
@@ -130,7 +125,6 @@ void BattleSim::Grid::handleTankCell(int x ,int y)
 
 bool BattleSim::Grid::handleTank(Tank* tank, Tank* other)
 {
-    bool wastrue = false;
     if (other != nullptr) {
         vec2 dir = tank->Get_Position() - other->Get_Position();
         while (other != nullptr)
