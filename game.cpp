@@ -49,6 +49,9 @@ const static vec2 rocket_size(25, 24);
 vector<LinkedList> redHealthBars = {};
 vector<LinkedList> blueHealthBars = {};
 
+QuadTree redTanksQTree;
+QuadTree blueTanksQTree;
+
 const static float tank_radius = 12.f;
 const static float rocket_radius = 10.f;
 
@@ -56,9 +59,12 @@ mutex mtx;
 
 // -----------------------------------------------------------
 // Initialize the application
-// -----------------------------------------------------------
 void Game::Init()
 {
+    vec2 nullpoint = {0, 0};
+    vec2 Maxborder = {SCRWIDTH, SCRHEIGHT};
+    redTanksQTree = QuadTree(nullpoint, Maxborder);
+    blueTanksQTree = QuadTree(nullpoint, Maxborder);
     frame_count_font = new Font("assets/digital_small.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ:?!=-0123456789.");
 
     tanks.reserve(NUM_TANKS_BLUE + NUM_TANKS_RED);
@@ -86,13 +92,24 @@ void Game::Init()
     {
         tanks.push_back(Tank(&grid, start_red_x + ((i % max_rows) * spacing), start_red_y + ((i / max_rows) * spacing), RED, &tank_red, &smoke, 80, 80, tank_radius, TANK_MAX_HEALTH, TANK_MAX_SPEED));
     }
-    for (auto& tank : tanks)
+    for (Tank& tank : tanks)
     {
-        if (tank.allignment == RED)
+       QNode qnode =  QNode(tank.position, tank);
+        if (tank.allignment == RED) {
+            redTanksQTree;
             redTanks.emplace_back(&tank);
+            redTanksQTree.insertNode(qnode);
+        }
         else
+        {
+            
             blueTanks.emplace_back(&tank);
+            blueTanksQTree.insertNode(qnode);
+            blueTanksQTree;
+        }
+         
     }
+    
     particle_beams.push_back(Particle_beam(vec2(SCRWIDTH / 2, SCRHEIGHT / 2), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
     particle_beams.push_back(Particle_beam(vec2(80, 80), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
     particle_beams.push_back(Particle_beam(vec2(1200, 600), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
@@ -117,7 +134,7 @@ Tank& Game::FindClosestEnemy(Tank& current_tank)
 {
     float closest_distance = numeric_limits<float>::infinity();
     int closest_index = 0;
-
+    redTanksQTree;
     for (int i = 0; i < tanks.size(); i++)
     {
         if (tanks.at(i).allignment != current_tank.allignment && tanks.at(i).active)
@@ -387,7 +404,7 @@ void BattleSim::Game::DrawBlueHealth()
     int countBlue = 0;
     for (auto& bucket : blueHealthBars)
     {
-        node* currentBlueTank = bucket.head;
+        LinkedListnode* currentBlueTank = bucket.head;
         while (currentBlueTank != nullptr)
         {
             DrawHealthBars(countBlue, 'b', currentBlueTank->data);
@@ -412,7 +429,7 @@ void BattleSim::Game::DrawRedHealth()
     int countRed = 0;
     for (auto& bucket : redHealthBars)
     {
-        node* currentRedTank = bucket.head;
+        LinkedListnode* currentRedTank = bucket.head;
         while (currentRedTank != nullptr)
         {
             DrawHealthBars(countRed, 'r', currentRedTank->data);
