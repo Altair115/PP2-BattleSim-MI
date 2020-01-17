@@ -68,10 +68,16 @@ bool BattleSim::QuadTree::insertNode(QNode node)
     if (&node == nullptr) return false;
     if (!inBoundary(node.pos)) return false;
     if (points.size() < this->capacity && NWTree == NULL) {
-        points.push_back(node);
+        points.push_back(&node);
         count++;
+        node.NWBorder = abs(topLeftBorder.x - node.pos.x);
+        node.NEBorder = abs(topLeftBorder.y - node.pos.y);
+        node.SWBorder = abs(botRightBorder.x - node.pos.x);
+        node.SEBorder = abs(botRightBorder.x - node.pos.x);
         return true;
+  
    }
+
     if (NWTree == NULL) {
         subdivide();
     }
@@ -101,61 +107,31 @@ void BattleSim::QuadTree::subdivide()
     SETree = new QuadTree(
         vec2((topLeftBorder.x + botRightBorder.x) / 2, (topLeftBorder.y + botRightBorder.y) / 2),
         vec2( botRightBorder.x, botRightBorder.y));
-
-
+    for (auto node : points) {
+        this->NETree->insertNode(*node);
+        this->NWTree->insertNode(*node);
+        this->SETree->insertNode(*node); 
+        this->SWTree->insertNode(*node);
+        points.clear();
+    }
 
 
 }
 
-QNode BattleSim::QuadTree::FindClosest(vec2 tankpos , QNode closestnode){
-
-    QNode* closest = &closestnode;
-    if (!inBoundary(tankpos))
-        return;
-    if ((topLeftBorder.x + botRightBorder.x) / 2 >= tankpos.x)
-    {
-        if ((topLeftBorder.y + botRightBorder.y) / 2 >= tankpos.y) {
-
-            if (NWTree == NULL) {
-                return NULL;
-            }
-            return NWTree->FindClosest(tankpos);
-        }
-        else
-        {
-            if (NETree == NULL)
-            {
-                return NULL;
-            }
-            return NETree->FindClosest(tankpos);
-        }
-    }
-    else
-    {
-        if ((topLeftBorder.y + botRightBorder.y) / 2 >= tankpos.y) {
-            if (SWTree == NULL)
-            {
-                return NULL;
-            }
-            return SWTree->FindClosest(tankpos);
-        }
-        else
-        {
-            if (SETree == NULL)
-            {
-                return NULL;
-            }
-            return SETree->FindClosest(tankpos);
-        }
-    }
-    return closestnode ;
+QNode BattleSim::QuadTree::FindClosest(vec2 tankpos, QNode closestnode)
+{
+    //go to the quadrent tankpos
+    //check if it has more quadtree's
+    //
+    return QNode();
 }
 
 bool BattleSim::QuadTree::inBoundary(vec2 point)
 {
-    return (point.x >= topLeftBorder.x &&
-            point.x <= botRightBorder.x &&
-            point.y >= topLeftBorder.y &&
-            point.y <= botRightBorder.y);
+   return(point.x <= topLeftBorder.x &&
+        point.x >= botRightBorder.x &&
+        point.y <= topLeftBorder.y &&
+        point.y >= botRightBorder.y)
+        ;
 }
 

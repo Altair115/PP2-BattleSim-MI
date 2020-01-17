@@ -63,8 +63,8 @@ void Game::Init()
 {
     vec2 nullpoint = {0, 0};
     vec2 Maxborder = {SCRWIDTH, SCRHEIGHT};
-    redTanksQTree = QuadTree(nullpoint, Maxborder);
-    blueTanksQTree = QuadTree(nullpoint, Maxborder);
+    redTanksQTree = QuadTree(Maxborder, nullpoint);
+    blueTanksQTree = QuadTree(Maxborder, nullpoint);
     frame_count_font = new Font("assets/digital_small.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ:?!=-0123456789.");
 
     tanks.reserve(NUM_TANKS_BLUE + NUM_TANKS_RED);
@@ -94,22 +94,21 @@ void Game::Init()
     }
     for (Tank& tank : tanks)
     {
-       QNode qnode =  QNode(tank.position, tank);
-        if (tank.allignment == RED) {
-            redTanksQTree;
+        QNode qnode = QNode(tank.position, tank);
+        if (tank.allignment == RED)
+        {
             redTanks.emplace_back(&tank);
             redTanksQTree.insertNode(qnode);
         }
         else
         {
-            
+
             blueTanks.emplace_back(&tank);
             blueTanksQTree.insertNode(qnode);
             blueTanksQTree;
         }
-         
     }
-    
+
     particle_beams.push_back(Particle_beam(vec2(SCRWIDTH / 2, SCRHEIGHT / 2), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
     particle_beams.push_back(Particle_beam(vec2(80, 80), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
     particle_beams.push_back(Particle_beam(vec2(1200, 600), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
@@ -257,7 +256,6 @@ void Game::Draw()
     //Draw sorted health bars
     DrawBlueHealth();
     DrawRedHealth();
-   
 }
 
 // -----------------------------------------------------------
@@ -358,8 +356,7 @@ void BattleSim::Game::UpdateRockets()
 void BattleSim::Game::UpdateParticalBeams()
 {
     tbb::parallel_for(tbb::blocked_range<int>(0, particle_beams.size()),
-                      [&](tbb::blocked_range<int> r)
-    {
+                      [&](tbb::blocked_range<int> r) {
                           for (int i = r.begin(); i < r.end(); ++i)
                           {
 
@@ -380,7 +377,7 @@ void BattleSim::Game::UpdateParticalBeams()
                                   }
                               }
                           }
-    });
+                      });
 }
 
 vector<LinkedList> BattleSim::Game::BucketSort(vector<Tank*>& unsortedtanks, int numberofbuckets)
@@ -388,7 +385,7 @@ vector<LinkedList> BattleSim::Game::BucketSort(vector<Tank*>& unsortedtanks, int
     vector<LinkedList> buckets(numberofbuckets);
     for (auto& tank : unsortedtanks)
     {
-        buckets.at(tank->health > 0  ? tank->health / numberofbuckets : 0).InsertValue(tank->health > 0 ? tank->health : 0);
+        buckets.at(tank->health > 0 ? tank->health / numberofbuckets : 0).InsertValue(tank->health > 0 ? tank->health : 0);
     }
     return buckets;
 }
