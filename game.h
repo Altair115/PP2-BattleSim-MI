@@ -63,6 +63,7 @@ class Game
     vector<Tank*> blueTanks;
     vector<Tank*> redTanks;
     Font* frame_count_font;
+
     long long frame_count = 0;
     Grid grid;
 

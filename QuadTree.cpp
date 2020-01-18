@@ -70,14 +70,17 @@ bool BattleSim::QuadTree::insertNode(QNode node)
     if (points.size() < this->capacity && NWTree == NULL) {
         points.push_back(&node);
         count++;
-        node.NWBorder = abs(topLeftBorder.x - node.pos.x);
+        float k = 5;
+        node.test = k;
+       /* node.NWBorder = abs(topLeftBorder.x - node.pos.x);
         node.NEBorder = abs(topLeftBorder.y - node.pos.y);
         node.SWBorder = abs(botRightBorder.x - node.pos.x);
-        node.SEBorder = abs(botRightBorder.x - node.pos.x);
+        node.SEBorder = abs(botRightBorder.x - node.pos.x);*/
+        this->points;
         return true;
   
    }
-
+    this->points;
     if (NWTree == NULL) {
         subdivide();
     }
@@ -112,9 +115,9 @@ void BattleSim::QuadTree::subdivide()
         this->NWTree->insertNode(*node);
         this->SETree->insertNode(*node); 
         this->SWTree->insertNode(*node);
-        points.clear();
+        
     }
-
+    points.clear();
 
 }
 

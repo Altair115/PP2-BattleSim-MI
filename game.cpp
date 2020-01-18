@@ -48,9 +48,10 @@ const static vec2 rocket_size(25, 24);
 
 vector<LinkedList> redHealthBars = {};
 vector<LinkedList> blueHealthBars = {};
-
-QuadTree redTanksQTree;
-QuadTree blueTanksQTree;
+vec2 nullpoint = {0, 0};
+vec2 Maxborder = {SCRWIDTH, SCRHEIGHT};
+QuadTree *redTanksQTree = new QuadTree(Maxborder, nullpoint);;
+QuadTree *blueTanksQTree = new QuadTree(Maxborder, nullpoint);
 
 const static float tank_radius = 12.f;
 const static float rocket_radius = 10.f;
@@ -61,10 +62,7 @@ mutex mtx;
 // Initialize the application
 void Game::Init()
 {
-    vec2 nullpoint = {0, 0};
-    vec2 Maxborder = {SCRWIDTH, SCRHEIGHT};
-    redTanksQTree = QuadTree(Maxborder, nullpoint);
-    blueTanksQTree = QuadTree(Maxborder, nullpoint);
+
     frame_count_font = new Font("assets/digital_small.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ:?!=-0123456789.");
 
     tanks.reserve(NUM_TANKS_BLUE + NUM_TANKS_RED);
@@ -98,17 +96,17 @@ void Game::Init()
         if (tank.allignment == RED)
         {
             redTanks.emplace_back(&tank);
-            redTanksQTree.insertNode(qnode);
+            redTanksQTree->insertNode(qnode);
         }
         else
         {
 
             blueTanks.emplace_back(&tank);
-            blueTanksQTree.insertNode(qnode);
+            blueTanksQTree->insertNode(qnode);
             blueTanksQTree;
         }
     }
-
+    blueTanksQTree;
     particle_beams.push_back(Particle_beam(vec2(SCRWIDTH / 2, SCRHEIGHT / 2), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
     particle_beams.push_back(Particle_beam(vec2(80, 80), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
     particle_beams.push_back(Particle_beam(vec2(1200, 600), vec2(100, 50), &particle_beam_sprite, PARTICLE_BEAM_HIT_VALUE));
@@ -133,7 +131,7 @@ Tank& Game::FindClosestEnemy(Tank& current_tank)
 {
     float closest_distance = numeric_limits<float>::infinity();
     int closest_index = 0;
-    redTanksQTree;
+    blueTanksQTree;
     for (int i = 0; i < tanks.size(); i++)
     {
         if (tanks.at(i).allignment != current_tank.allignment && tanks.at(i).active)

@@ -10,20 +10,21 @@ class QNode
     {
         tank = &_tank;
         pos = _pos;
-        NWBorder = numeric_limits<float>::infinity();
-        NEBorder = numeric_limits<float>::infinity();
-        SWBorder = numeric_limits<float>::infinity();
-        SEBorder = numeric_limits<float>::infinity();
+        //NWBorder = numeric_limits<float>::infinity();
+        //NEBorder = numeric_limits<float>::infinity();
+        //SWBorder = numeric_limits<float>::infinity();
+        //SEBorder = numeric_limits<float>::infinity();
+        test = 9.9999;
     }
     QNode()
     {
         tank = nullptr;
     }
-
-    float NWBorder;
+    float test;
+  /*  float NWBorder;
     float NEBorder;
     float SWBorder;
-    float SEBorder;
+    float SEBorder;*/
     vec2 pos = (0, 0);
     Tank* tank = nullptr;
 };
