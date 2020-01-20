@@ -4,29 +4,18 @@ namespace BattleSim
 class QNode
 {
   private:
-
   public:
-    QNode(vec2 _pos, Tank _tank)
+    QNode(vec2 _pos, Tank *_tank)
     {
-        tank = &_tank;
+        tank = _tank;
         pos = _pos;
-        //NWBorder = numeric_limits<float>::infinity();
-        //NEBorder = numeric_limits<float>::infinity();
-        //SWBorder = numeric_limits<float>::infinity();
-        //SEBorder = numeric_limits<float>::infinity();
-        test = 9.9999;
     }
     QNode()
     {
         tank = nullptr;
     }
-    float test;
-  /*  float NWBorder;
-    float NEBorder;
-    float SWBorder;
-    float SEBorder;*/
     vec2 pos = (0, 0);
-    Tank* tank = nullptr;
+    Tank *tank = nullptr;
 };
 class QuadTree
 {
@@ -38,21 +27,24 @@ class QuadTree
     QuadTree* SETree;
     QuadTree* SWTree;
 
+
   public:
     vec2 topLeftBorder;
     vec2 botRightBorder;
+        Rectangle2D* rectangle;
     QuadTree()
     {
         count = 0;
-
         topLeftBorder = (0, 0);
         botRightBorder = (0, 0);
+        rectangle = nullptr;
         NETree = nullptr;
         NWTree = nullptr;
         SETree = nullptr;
         SWTree = nullptr;
+        
     }
-    QuadTree(vec2 topL, vec2 botR)
+    QuadTree(vec2 topL, vec2 botR,QuadTree* parrent = nullptr)
     {
 
         count = 0;
@@ -62,10 +54,15 @@ class QuadTree
         SWTree = nullptr;
         topLeftBorder = topL;
         botRightBorder = botR;
+        rectangle = new Rectangle2D(botR, topL);
     }
-    bool insertNode(QNode);
+    ~QuadTree() {
+        delete rectangle;
+    }
+    bool insertNode(QNode*);
     void subdivide();
-    QNode FindClosest(vec2, QNode);
+    QNode* FindClosest(vec2, QNode*,float);
     bool inBoundary(vec2);
+    tuple<QNode*,float> closestDistanceinPoints(vec2 tankpos, float closestdistance);
 };
 } // namespace BattleSim

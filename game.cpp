@@ -1,7 +1,7 @@
 #include "precomp.h" // include (only) this in every .cpp file
 
-#define NUM_TANKS_BLUE 1279
-#define NUM_TANKS_RED 1279
+#define NUM_TANKS_BLUE 8//1279
+#define NUM_TANKS_RED 8//1279
 
 #define TANK_MAX_HEALTH 1000
 #define ROCKET_HIT_VALUE 60
@@ -92,17 +92,17 @@ void Game::Init()
     }
     for (Tank& tank : tanks)
     {
-        QNode qnode = QNode(tank.position, tank);
+        QNode* x = new QNode(tank.position, &tank);
         if (tank.allignment == RED)
         {
             redTanks.emplace_back(&tank);
-            redTanksQTree->insertNode(qnode);
+            redTanksQTree->insertNode(x);
         }
         else
         {
 
             blueTanks.emplace_back(&tank);
-            blueTanksQTree->insertNode(qnode);
+            blueTanksQTree->insertNode(x);
             blueTanksQTree;
         }
     }
@@ -131,7 +131,11 @@ Tank& Game::FindClosestEnemy(Tank& current_tank)
 {
     float closest_distance = numeric_limits<float>::infinity();
     int closest_index = 0;
-    blueTanksQTree;
+    if (current_tank.allignment == RED) {
+        auto closesttank = blueTanksQTree->FindClosest(current_tank.position, nullptr, numeric_limits<float>::infinity());
+        int x = 9;
+    }
+    
     for (int i = 0; i < tanks.size(); i++)
     {
         if (tanks.at(i).allignment != current_tank.allignment && tanks.at(i).active)
