@@ -61,8 +61,10 @@ class QuadTree
     }
     bool insertNode(QNode*);
     void subdivide();
-    QNode* FindClosest(vec2, QNode*,float);
+    tuple<QNode*,float> FindClosest(vec2, QNode*,float);
     bool inBoundary(vec2);
-    tuple<QNode*,float> closestDistanceinPoints(vec2 tankpos, float closestdistance);
+    void updateTank(Tank*);
+    QNode* removeNode(QNode*);
+    tuple<QNode*,float> closestDistanceinPoints(vec2, float,QNode*);
 };
 } // namespace BattleSim

@@ -1,10 +1,10 @@
 #include "precomp.h" // include (only) this in every .cpp file
 
-#define NUM_TANKS_BLUE 8//1279
-#define NUM_TANKS_RED 8//1279
+#define NUM_TANKS_BLUE 1279
+#define NUM_TANKS_RED 1279
 
 #define TANK_MAX_HEALTH 1000
-#define ROCKET_HIT_VALUE 60
+#define ROCKET_HIT_VALUE 60 
 #define PARTICLE_BEAM_HIT_VALUE 50
 
 #define TANK_MAX_SPEED 1.5
@@ -48,7 +48,7 @@ const static vec2 rocket_size(25, 24);
 
 vector<LinkedList> redHealthBars = {};
 vector<LinkedList> blueHealthBars = {};
-vec2 nullpoint = {0, 0};
+vec2 nullpoint = {0, -2000};
 vec2 Maxborder = {SCRWIDTH, SCRHEIGHT};
 QuadTree *redTanksQTree = new QuadTree(Maxborder, nullpoint);;
 QuadTree *blueTanksQTree = new QuadTree(Maxborder, nullpoint);
@@ -103,7 +103,7 @@ void Game::Init()
 
             blueTanks.emplace_back(&tank);
             blueTanksQTree->insertNode(x);
-            blueTanksQTree;
+
         }
     }
     blueTanksQTree;
@@ -128,29 +128,22 @@ Game::~Game()
 // Iterates through all tanks and returns the closest enemy tank for the given tank
 // -----------------------------------------------------------
 Tank& Game::FindClosestEnemy(Tank& current_tank)
-{
-    float closest_distance = numeric_limits<float>::infinity();
-    int closest_index = 0;
-    if (current_tank.allignment == RED) {
-        auto closesttank = blueTanksQTree->FindClosest(current_tank.position, nullptr, numeric_limits<float>::infinity());
-        int x = 9;
-    }
-    
-    for (int i = 0; i < tanks.size(); i++)
     {
-        if (tanks.at(i).allignment != current_tank.allignment && tanks.at(i).active)
+        float closest_distance = numeric_limits<float>::infinity();
+        int closest_index = 0;
+        if (current_tank.allignment == RED)
         {
-            float sqrDist = fabsf((tanks.at(i).Get_Position() - current_tank.Get_Position()).sqrLength());
-            if (sqrDist < closest_distance)
-            {
-                closest_distance = sqrDist;
-                closest_index = i;
-            }
+            auto result = blueTanksQTree->FindClosest(current_tank.position, nullptr, numeric_limits<float>::infinity());
+            auto closesttank = get<0>(result);
+            return *closesttank->tank;
         }
-    }
-
-    return tanks.at(closest_index);
-}
+        else
+        {
+            auto result = redTanksQTree->FindClosest(current_tank.position, nullptr, numeric_limits<float>::infinity());
+            auto closesttank = get<0>(result);
+            return *closesttank->tank;
+        }
+    }   
 
 // -----------------------------------------------------------
 // Update the game state:
@@ -323,8 +316,14 @@ void BattleSim::Game::UpdateTanks()
             tank.Tick();
             if (tank.Rocket_Reloaded())
             {
+                if (tank.allignment == RED) {
+                    redTanksQTree->updateTank(&tank);
+                }
+                else
+                {
+                    blueTanksQTree->updateTank(&tank);
+                }
                 Tank& target = FindClosestEnemy(tank);
-
                 rockets.push_back(
                     Rocket(&grid, tank.position, (target.Get_Position() - tank.position).normalized() * 3, rocket_radius,
                            tank.allignment, ((tank.allignment == RED) ? &rocket_red : &rocket_blue)));
