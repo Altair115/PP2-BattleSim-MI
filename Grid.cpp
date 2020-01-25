@@ -75,93 +75,63 @@ void BattleSim::Grid::handleTankCell(int x ,int y)
     if(tank != nullptr)                  //     7 | 8 | 9
     {
         if (tank->next_ != nullptr) {
-            if (handleTank(tank, tank->next_)) {
-                return;
-            } // spot 5   
+            handleTank(tank, tank->next_);
         }
         if (x < numberOfCells - 1)
         {
-            if (handleTank(tank, tankcells[x + 1][y])) {
-                return;
-            } //6
+            handleTank(tank, tankcells[x + 1][y]);
         }
         if (x > 0) // 4
         {
-            if (handleTank(tank, tankcells[x - 1][y])) {
-                return;
-            }
+            handleTank(tank, tankcells[x - 1][y]);
         }
                                                                 
         if (x > 0 && y > 0)
         {
-            if (handleTank(tank, tankcells[x - 1][y - 1])) {
-                return;
-            }
+            handleTank(tank, tankcells[x - 1][y - 1]);
         } // 7
 
         if (y > 0)
         {
-            if (handleTank(tank, tankcells[x][y - 1])) {
-                return;
-            }
+            handleTank(tank, tankcells[x][y - 1]);
         } // 8
 
         if (x < numberOfCells - 1 && y > 0)
         {
-            if (handleTank(tank, tankcells[x + 1][y - 1])) {
-                return;
-            } //9    
+            handleTank(tank, tankcells[x + 1][y - 1]); //9    
         }
         if (x < numberOfCells - 1 && y < numberOfCells - 1)
         {
-            if (handleTank(tank, tankcells[x + 1][y + 1])) { return; } // 3  
+            handleTank(tank, tankcells[x + 1][y + 1]); // 3  
         }
         if (x > 0 && y < numberOfCells - 1){
-            if (handleTank(tank, tankcells[x - 1][y + 1])) { return; } // 1
+            handleTank(tank, tankcells[x - 1][y + 1]); // 1
          }
         if (y < numberOfCells - 1){
-            if (handleTank(tank, tankcells[x][y + 1])) { return; } // 2
-  
+            handleTank(tank, tankcells[x][y + 1]); // 2
         }  
     }
 }
 
-bool BattleSim::Grid::handleTank(Tank* tank, Tank* other)
+void BattleSim::Grid::handleTank(Tank* tank, Tank* other)
 {
-    if (other != nullptr) {
-        vec2 dir = tank->Get_Position() - other->Get_Position();
         while (other != nullptr)
         {
-            if (collision(tank, other, dir))
-            {
-                int oldcellX = tank->CellX;
-                int oldcellY = tank->CellY;
-                vec2 oldPosition = tank->position;
-                tank->Push(dir.normalized(), 1.f);
-                moveTank2NewCell(tank, oldPosition);
-                if (oldcellX != tank->CellX && oldcellY != tank->CellY)
-                {
-                    handleTankCell(tank->CellX, tank->CellY);
-                    return true;
-                }
-               
-            };
+            collision(tank, other);
             other = other->next_;
         }
-    }
-    return false;
 }
 
-bool BattleSim::Grid::collision(Tank* tank, Tank* other,vec2 dir)
+void BattleSim::Grid::collision(Tank* tank, Tank* other)
 {
+    vec2 dir = tank->Get_Position() - other->Get_Position();
     float dirSquaredLen = dir.sqrLength();
     float colSquaredLen = (tank->Get_collision_radius() * tank->Get_collision_radius()) +
                           (other->Get_collision_radius() * other->Get_collision_radius());
     if (dirSquaredLen < colSquaredLen)
     {
-        return true;
+        tank->Push(dir.normalized(), 1.f);
     }
-    return false;
 }
 
 void BattleSim::Grid::addRocket2Cell(Rocket* rocket)
@@ -186,9 +156,9 @@ void BattleSim::Grid::moveRocket2NewCell(Rocket* rocket, vec2 oldposition)
             rocket->active = false;
             return;
         }
-        // handelCell(cellX,cellY);
         // If it didn't change cells, we're done.
         if (oldCellX == cellX && oldCellY == cellY) return;
+       
 
         // Add it back to the grid at its new cell.
         addRocket2Cell(rocket);

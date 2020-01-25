@@ -276,6 +276,7 @@ void BattleSim::Game::UpdateTanks()
     {
         if (tank.active)
         {
+          //QuadTreebasedColision
           /*  vector<Tank*> allNodesInRange;
             allNodesInRange = allTanksQTree->FindNodesInRange(tank, allNodesInRange, tank.collision_radius);
             if (allNodesInRange.size() > 0)
@@ -286,6 +287,7 @@ void BattleSim::Game::UpdateTanks()
                     tank.Push(dir.normalized(), 1.0f);
                 }
             } */
+            tank.grid->handleTankCell(tank.CellX, tank.CellY);
             allTanksQTree->removeNode(&tank); 
             tank.Tick();
             allTanksQTree->insertNode(&tank);
