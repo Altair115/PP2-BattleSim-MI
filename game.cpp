@@ -287,7 +287,7 @@ void BattleSim::Game::UpdateTanks()
                     tank.Push(dir.normalized(), 1.0f);
                 }
             } */
-            tank.grid->handleTankCell(tank.CellX, tank.CellY);
+            tank.grid->handleTankCell(tank.CellX, tank.CellY,&tank);
             allTanksQTree->removeNode(&tank); 
             tank.Tick();
             allTanksQTree->insertNode(&tank);

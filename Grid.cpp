@@ -69,13 +69,13 @@ void BattleSim::Grid::moveTank2NewCell(Tank* tank, vec2 oldposition)
     addTank2Cell(tank);
     }
 
-void BattleSim::Grid::handleTankCell(int x ,int y)
+void BattleSim::Grid::handleTankCell(int x ,int y ,Tank* tank)
 {                                        //     1 | 2 | 3
-    Tank* tank = tankcells[x][y];        //     4 | 5 | 6
+    Tank* currentTankCell = tankcells[x][y];        //     4 | 5 | 6
     if(tank != nullptr)                  //     7 | 8 | 9
     {
         if (tank->next_ != nullptr) {
-            handleTank(tank, tank->next_);
+            handleTank(tank, currentTankCell);
         }
         if (x < numberOfCells - 1)
         {
@@ -114,12 +114,16 @@ void BattleSim::Grid::handleTankCell(int x ,int y)
 }
 
 void BattleSim::Grid::handleTank(Tank* tank, Tank* other)
-{
-        while (other != nullptr)
+{ 
+    while (other != nullptr)
+    {
+        if (tank != other)
         {
             collision(tank, other);
-            other = other->next_;
+            
         }
+        other = other->next_;
+    }    
 }
 
 void BattleSim::Grid::collision(Tank* tank, Tank* other)
@@ -161,15 +165,12 @@ void BattleSim::Grid::moveRocket2NewCell(Rocket* rocket, vec2 oldposition)
        
 
         // Add it back to the grid at its new cell.
-        addRocket2Cell(rocket);
-        handelRocketCell(cellX, cellY);
+        handelRocketCell(cellX, cellY, rocket);
     }
 
-void BattleSim::Grid::handelRocketCell(int x, int y)
+void BattleSim::Grid::handelRocketCell(int x, int y,Rocket* rocket)
 {
-    tankcells[x][y];
     Tank* tank = tankcells[x][y];
-    Rocket* rocket = rocketcells[x][y];
     while (tank != NULL)
     { 
         if (tank->active) {
