@@ -198,6 +198,7 @@ void Game::Init()
     }
     for (Tank& tank : tanks)
     {
+        tank.grid->addTank2Cell(&tank);
         QNode* x = new QNode(tank.position, &tank);
         allTanksQTree->insertNode(&tank);
         if (tank.allignment == RED)
