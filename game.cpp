@@ -2,7 +2,7 @@
 
 #define NUM_TANKS_BLUE 1279
 #define NUM_TANKS_RED 1279
-
+#define NUM_TANKS_TOTAL 2558
 #define TANK_MAX_HEALTH 1000
 #define ROCKET_HIT_VALUE 60 
 #define PARTICLE_BEAM_HIT_VALUE 50
@@ -151,7 +151,7 @@ void Game::Init()
 
     // Display the result to the screen
     for (i = 0; i < LIST_SIZE; i++)
-        printf("%d + %d = %d\n", A[i], B[i], C[i]);
+       // printf("%d + %d = %d\n", A[i], B[i], C[i]);
 
     // Clean up
     ret = clFlush(command_queue);
@@ -170,7 +170,15 @@ void Game::Init()
 
     ///////
     frame_count_font = new Font("assets/digital_small.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ:?!=-0123456789.");
+    for (int y = 0; y < numberOfCells; y++)
+    {
+        for (int x = 0; x < numberOfCells; x++)
+        {
+            GridCellX[x] = 0;
+            GridCellX[y] = 0;
 
+        }
+    }
     tanks.reserve(NUM_TANKS_BLUE + NUM_TANKS_RED);
     blueTanks.reserve(NUM_TANKS_BLUE);
     redTanks.reserve(NUM_TANKS_RED);
@@ -383,6 +391,7 @@ void BattleSim::Game::UpdateTanks()
         if (tank.active)
         {
           //QuadTreebasedColision
+            GPGPU(&tank);
           /*  vector<Tank*> allNodesInRange;
             allNodesInRange = allTanksQTree->FindNodesInRange(tank, allNodesInRange, tank.collision_radius);
             if (allNodesInRange.size() > 0)
@@ -510,6 +519,22 @@ void BattleSim::Game::DrawRedHealth()
             countRed++;
         }
     }
+}
+
+void BattleSim::Game::GPGPU(Tank* tank)
+{
+    
+    int cellX = (int)((tank->position.x /sizeOfCell) + gridOffset);
+    int cellY = (int)((tank->position.y /sizeOfCell) + gridOffset);
+    if (GridCellX[cellX] != nullptr)
+    {
+        float* tankposx = GridCellX[cellX];
+        int x = sizeof(tankposx) / sizeof(int);
+        tankposx[x];
+    }
+    GridCellY[cellY] = &tank->position.y;
+    GridCellX[cellX] = &tank->position.x;
+    
 }
 
 // -----------------------------------------------------------

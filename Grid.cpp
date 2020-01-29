@@ -38,13 +38,13 @@ void BattleSim::Grid::moveTank2NewCell(Tank* tank, vec2 oldposition)
     // If it didn't change cells, we're done.
     if (oldCellX == cellX && oldCellY == cellY) return;
     vector<Tank*> &temp = tankcells[oldCellX][oldCellY];
-    if (temp.size() > largestsize) {
+   /* if (temp.size() > largestsize) {
         largestsize = temp.size();
         cout << largestsize << endl;
-    }
+    }*/
     for (int i = 0; i < temp.size(); i++)
     {
-        if (temp[i] == tank)
+        if (temp[i] == tank ) // || temp[i]->active == false check ignor dead tanks 
         {
             temp.erase(temp.begin() + i);
         }
@@ -56,9 +56,9 @@ void BattleSim::Grid::moveTank2NewCell(Tank* tank, vec2 oldposition)
 }
 
 void BattleSim::Grid::handleTankCell(int x ,int y ,Tank* tank)
-{                                                   //     1 | 2 | 3
+{                                                           //     1 | 2 | 3
     vector<Tank*> currentTankCell = tankcells[x][y];        //     4 | 5 | 6
-    if(tank != nullptr)                             //     7 | 8 | 9
+    if(tank != nullptr)                                     //     7 | 8 | 9
     {
         if (currentTankCell.size() != 0) {
             handleTank(tank, currentTankCell);
@@ -142,7 +142,6 @@ void BattleSim::Grid::moveRocket2NewCell(Rocket* rocket, vec2 oldposition)
 
         // Add it back to the grid at its new cell.
         handelRocketCell(cellX, cellY, rocket);
-        if (oldCellX == cellX && oldCellY == cellY) return;
     }
     // handelCell(cellX,cellY);
     // If it didn't change cells, we're done.

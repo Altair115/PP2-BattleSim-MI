@@ -13,7 +13,12 @@ class QNode;
 
 class Game
 {
+
   public:
+
+    float* posistionX = (float*)malloc(sizeof(float));
+    float* posistionY = (float*)malloc(sizeof(float));
+    typedef struct tankposistion tankposistions[50];
     ~Game();
     void SetTarget(Surface* surface) { screen = surface; }
     void Init();
@@ -29,6 +34,7 @@ class Game
     void SortHealthBars();
     void DrawBlueHealth();
     void DrawRedHealth();
+    void GPGPU(Tank*);
     void DrawHealthBars(int i, char color, int health);
     Tank& FindClosestEnemy(Tank& current_tank);
 
@@ -63,10 +69,13 @@ class Game
     vector<Tank*> blueTanks;
     vector<Tank*> redTanks;
     Font* frame_count_font;
-
+    float* GridCellX[1000];
+    float* GridCellY[1000];
+    static const int numberOfCells = 1000;
     long long frame_count = 0;
     Grid grid;
-
+    static const int sizeOfCell = 26;
+    static const int gridOffset = 15;
     bool lock_update = false;
 };
 
