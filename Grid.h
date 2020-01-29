@@ -19,13 +19,15 @@ class Grid
       void handelRocket(Rocket* rocket,Tank* tank);
       void collision(Tank* tank, Tank* other);
       void handelRocketCell(int x, int y,Rocket*);
-      static const int numberOfCells = 1000;
+      static const int numberOfCells = 250;
       static const int sizeOfCell = 26;
       static const int gridOffset = 15;
 
     private:
       int largestsize; //largest 33 
      std::vector<Tank*> tankcells[numberOfCells][numberOfCells];
+
+     
 };
 }
 
