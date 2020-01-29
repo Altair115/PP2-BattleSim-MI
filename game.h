@@ -15,7 +15,6 @@ class Game
 {
 
   public:
-
     float* posistionX = (float*)malloc(sizeof(float));
     float* posistionY = (float*)malloc(sizeof(float));
     typedef struct tankposistion tankposistions[50];
@@ -30,7 +29,7 @@ class Game
     void UpdateTanks();
     void UpdateRockets();
     void UpdateParticalBeams();
-    std::vector<LinkedList> BucketSort(std::vector<Tank*> &unsortedTanks,int numberofbuckets);
+    std::vector<LinkedList> BucketSort(std::vector<Tank*>& unsortedTanks, int numberofbuckets);
     void SortHealthBars();
     void DrawBlueHealth();
     void DrawRedHealth();
@@ -69,9 +68,14 @@ class Game
     vector<Tank*> blueTanks;
     vector<Tank*> redTanks;
     Font* frame_count_font;
-    float* GridCellX[1000];
+
     float* GridCellY[1000];
-    static const int numberOfCells = 1000;
+    static const int numberOfCells = 250;
+    static const int maximumUnitsInCell = 40;
+    static const int demensions = 2;
+    int gridarrys = numberOfCells * numberOfCells * maximumUnitsInCell * demensions;
+    float Xgrid[numberOfCells * numberOfCells * maximumUnitsInCell * demensions];
+    float Ygrid[numberOfCells * numberOfCells * maximumUnitsInCell * demensions];
     long long frame_count = 0;
     Grid grid;
     static const int sizeOfCell = 26;

@@ -170,14 +170,10 @@ void Game::Init()
 
     ///////
     frame_count_font = new Font("assets/digital_small.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ:?!=-0123456789.");
-    for (int y = 0; y < numberOfCells; y++)
+    for (int i = 0; i < gridarrys; i++)
     {
-        for (int x = 0; x < numberOfCells; x++)
-        {
-            GridCellX[x] = 0;
-            GridCellX[y] = 0;
-
-        }
+        Xgrid[i] = 69420.0f;
+        Ygrid[i] = 69420.0f;
     }
     tanks.reserve(NUM_TANKS_BLUE + NUM_TANKS_RED);
     blueTanks.reserve(NUM_TANKS_BLUE);
@@ -523,17 +519,14 @@ void BattleSim::Game::DrawRedHealth()
 
 void BattleSim::Game::GPGPU(Tank* tank)
 {
-    
-    int cellX = (int)((tank->position.x /sizeOfCell) + gridOffset);
-    int cellY = (int)((tank->position.y /sizeOfCell) + gridOffset);
-    if (GridCellX[cellX] != nullptr)
-    {
-        float* tankposx = GridCellX[cellX];
-        int x = sizeof(tankposx) / sizeof(int);
-        tankposx[x];
+    int cellpos = tank->CellY * maximumUnitsInCell * tank->CellX - maximumUnitsInCell;
+    maximumUnitsInCell;
+    for (int i = 0; i < maximumUnitsInCell; i++)
+    {   
+        Xgrid[cellpos] = tank->position.x;
+        Ygrid[cellpos] = tank->position.y;
     }
-    GridCellY[cellY] = &tank->position.y;
-    GridCellX[cellX] = &tank->position.x;
+    
     
 }
 
