@@ -1,4 +1,5 @@
 #include "precomp.h" // include (only) this in every .cpp file
+#include <CL/cl.h>
 
 #define NUM_TANKS_BLUE 1279
 #define NUM_TANKS_RED 1279
@@ -15,8 +16,6 @@
 #define HEALTH_BAR_SPACING 0
 
 #define MAX_FRAMES 2000
-
-#include <CL/cl.h>
 #define MAX_SOURCE_SIZE (0x100000)
 
 //Global performance timer
